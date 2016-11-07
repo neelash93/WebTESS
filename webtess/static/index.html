@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="webTess">
+<head>
+  <title>ACTLabs WebTESS</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://bootswatch.com/superhero/bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> -->
+  <link rel="stylesheet" type="text/css" href="css/mystyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-chart.js/0.10.2/angular-chart.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.1.1/Chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-chart.js/0.10.2/angular-chart.min.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-67006417-4', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</head>
+<body>
+<div class="container-fluid" ng-controller="formCtrl">
+  <div style="background-color:#007399">
+<h3 align="center">ACTLabs WebTESS</h3>
+</div>
+<hr>
+<form role="form" method="post" ng-submit="processForm()">
+<div class="col-md-4 col-xs-12">  <!-----this div for the passage text-------->
+  <br>
+  <div class="form-group">
+    <label for="passage" style="font-size:20px">Enter Passage:</label>
+    <p><br></p>
+    <textarea class="form-control" ng-model="formData.passage" rows="23" style="height:490px"></textarea>
+  </div>
+  <br>
+  <div class="row">
+    <input type="file" id="files" name="files" class="btn btn-xs" accept="text/plain" on-read-file="filetext(contents)"/><br>
+    <button type="button" style="background-color:#007399" class="btn btn-sm" ng-click="sam1()">Sample 1</button>
+    <button type="button"  style="background-color:#007399" class="btn btn-sm" ng-click="sam2()">Sample 2</button>
+    <button type="submit" style="background-color:#007399" class="btn btn-sm">Evaluate</button>
+    <button type="reset" style="background-color:#007399" class="btn btn-default btn-sm" ng-click="clear()">Reset</button>
+    <p><br></p>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 bdtop">
+      <p hidden>hello</p>
+      <p><br></p>
+    </div>
+    </div>
+</div>
+
+
+
+<!---------------------------this div for the tabs--------------------->
+
+
+
+<div class="col-md-8 col-xs-12 bdright" id="tabdiv" ng-show="tables">
+  <ul class="nav nav-pills nav-xs">
+    <li style="background-color:#007399" class="active"><a data-toggle="tab" href="#desc">Descriptive</a></li>
+    <li style="background-color:#007399" ><a data-toggle="tab" href="#read">Readability</a></li>
+    <li style="background-color:#007399" ><a data-toggle="tab" href="#wordfreq">Word Freq</a></li>
+    <li style="background-color:#007399" ><a data-toggle="tab" href="#pos">Part of Speech</a></li>
+    <li style="background-color:#007399" ><a data-toggle="tab" href="#phrases">Phrases</a></li>
+    <li style="background-color:#007399" ><a data-toggle="tab" href="#mrc">MRC</a></li>
+    <li style="background-color:#007399" ><a data-toggle="tab" href="#worddata">Word Data</a></li>
+    <li style="background-color:#007399" ><a data-toggle="tab" href="#sim">Similarity</a></li>
+  </ul>
+<hr>
+  <div class="tab-content">
+
+<!-------------DESCRIPTIVE STARTS HERE------------------->
+
+    <div id="desc" class="tab-pane fade in active">
+      <div class="row">
+      <div class="col-xs-12 col-sm-7 col-md-6">
+        <div class="row">
+          <div class="col-xs-9">
+            <p class="clearlabel" id="test">
+<strong>Words</strong>
+
+    Words (standard), total:
+    Words (actual), total:
+    Word length(chars), avg:
+    Words > 6 chars, %:
+
+<strong>Syllables</strong>
+
+    Sylls/word, avg:
+    Words > 2 syllables, %:
+
+<strong>Sentences</strong>
+
+    Sentences, total:
+    Words/sentence, avg:
+  </p>
+          </div>
+          <div class="col-xs-3">
+            <!-- <textarea class="tesslabel form-control" ng-model="descstats" rows="17" cols="2" style="height:360px;width:70px" disabled></textarea> -->
+            <p class="clearlabel">
+
+
+{{data.descriptive.stdwordcnt}}
+{{data.descriptive.realwordcnt}}
+{{data.descriptive.avgcharperword}}
+{{data.descriptive.percent_gt_six}}
+
+
+
+{{data.descriptive.avgsylls}}
+{{data.descriptive.syll_percent_gt_two}}
+
+
+
+{{data.descriptive.totalsents}}
+{{data.descriptive.avgwordpersent}}
+
+</p>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-xs-9">
+            <p class="clearlabel"><strong>Lexical Diversity</strong>
+
+    Type to Token Ratio:
+    MTLD:
+  </p>
+          </div>
+          <div class="col-xs-3">
+            <!-- <textarea class="tesslabel form-control" ng-model="desclexdiv" rows="5" cols="2" style="height:120px;width:70px" disabled></textarea> -->
+            <p class="clearlabel">
+
+{{data.descriptive.typetotoken}}
+{{data.descriptive.mtld}}
+            </p>
+          </div>
+        </div>
+        <br>
+      </div>
+      <div class="col-xs-12 col-sm-5 col-lg-4">
+          <!-- <div class="container-fluid form-group" -->
+            <div class="table-responsive multtable">
+              <table id="descwords" class="table table-striped table-bordered">
+                  <tr>
+                    <th>Word</th>
+                    <th>Chars</th>
+                    <th>Syllables</th>
+                  </tr>
+                  <tr ng-repeat="wordlengths in data.descriptive.wordlengths">
+                    <td>{{wordlengths.word}}</td>
+                    <td>{{wordlengths.clength}}</td>
+                    <td>{{wordlengths.slength}}</td>
+              </table>
+            <!-- <label for="descwords"><b>&emsp;&emsp;Words&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Chars&emsp;&emsp;&emsp;Syllables</b></label>
+            <textarea class="form-control multtext" id="descwords" rows="25" style="width:290px;height:471px">Hi&emsp;&emsp;&emsp;3&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;8&#13;&#10;Incomprehensible&emsp;&emsp;&emsp;3&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;8</textarea> -->
+          </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-11 col-lg-10" style="text-align:center;top:15px">
+        <p></p>
+        <button type="button" class="btn btn-md btn-info" data-toggle="modal" data-target="#descinfo">Info</button>
+        <button type="button" class="btn btn-md btn-info" ng-click="descgraph=(!descgraph)"><span ng-show="descgraph">Hide Graph</span><span ng-hide="descgraph">Show Graph</span></button>
+      </div>
+    </div>
+<br><br>
+  <div ng-if="descgraph">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-11 col-lg-10" style="text-align:center">
+        <p style="font-size:20px">Word Character Length</p>
+        <canvas id="char" height="100px" class="chart chart-pie" chart-legend="true" chart-data="chardata" chart-labels="charlabel"></canvas>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-11 col-lg-10" style="text-align:center">
+        <p style="font-size:20px">Word Syllable Length</p>
+        <canvas id="syll" height="100px" class="chart chart-doughnut" chart-legend="true" chart-data="sylldata" chart-labels="sylllabel"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- </div> -->
+
+
+
+<!-------------READABILITY STARTS------------------>
+
+
+
+    <div id="read" class="tab-pane fade">
+      <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-7 col-lg-6">
+        <div class="row">
+          <div class="col-xs-9 col-lg-9">
+            <p class="clearlabel">
+<b>Readability</b>
+
+    Flesch-Kincaid Grade Level (index):
+    Flesch-Kincaid Grade Level (CC grade):
+
+    Degrees of Reading Power (index):
+    Degrees of Reading Power (CC grade):
+
+    Flesch Reading Ease (index):
+    Flesch Reading Ease (grade):
+
+    Coleman-Liau (index):
+    Coleman-Liau (grade):
+
+    Dale-Chall (index):
+    Dale-Chall (grade):
+      D-C Words:
+      Non-D-C Words:</p>
+          </div>
+          <div class="col-xs-3">
+            <!-- <textarea class="tesslabel form-control" ng-model="readstats" rows="19" cols="2" style="height:400px;background-color:white" disabled></textarea> -->
+            <p class="clearlabel">
+
+
+{{data.readability.fkglindex}}
+{{data.readability.fkglgrade}}
+
+{{data.readability.drpindex}}
+{{data.readability.drpgrade}}
+
+{{data.readability.freindex}}
+{{data.readability.fregrade}}
+
+{{data.readability.colemanindex}}
+{{data.readability.colemangrade}}
+
+{{data.readability.dcindex}}
+{{data.readability.dcgrade}}
+{{data.readability.dcwords}}
+{{data.readability.nondcwords}}</p>
+          </div>
+      </div>
+<br>
+      </div>
+      <div class="col-xs-12 col-sm-4 col-md-5 col-lg-4">
+          <!-- <div class="container-fluid form-group" -->
+            <div class="table-responsive multtable" style="height:380px">
+              <table id="readwords" class="table table-striped table-bordered">
+                  <tr>
+                    <th>Word</th>
+                    <th> Chars</th>
+                    <th>Syllables</th>
+                  </tr>
+                  <tr ng-repeat="wordlengths in data.descriptive.wordlengths">
+                    <td>{{wordlengths.word}}</td>
+                    <td>{{wordlengths.clength}}</td>
+                    <td>{{wordlengths.slength}}</td>
+                  </tr>
+              </table>
+            <!-- <label for="descwords"><b>&emsp;&emsp;Words&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Chars&emsp;&emsp;&emsp;Syllables</b></label>
+            <textarea class="form-control multtext" id="descwords" rows="25" style="width:290px;height:471px">Hi&emsp;&emsp;&emsp;3&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;8&#13;&#10;Incomprehensible&emsp;&emsp;&emsp;3&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;8</textarea> -->
+          </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-lg-10" style="text-align:center;top:15px">
+        <p></p>
+        <button type="button" class="btn btn-md btn-info" data-toggle="modal" data-target="#readinfo">Info</button>
+      </div>
+    </div>
+    </div>
+
+
+
+
+    <!---------------------WORD FREQUENCY STARTS----------------->
+
+
+
+
+
+    <div id="wordfreq" class="tab-pane fade">
+      <div class="row">
+      <div class="col-xs-7 col-md-6 col-lg-5">
+        <div class="row">
+          <div class="col-xs-8">
+            <p class="clearlabel">
+<b>Word Frequencies</b>
+
+    Mean SFI:
+
+    Min SFI:
+    25th %ile SFI:
+    Median SFI:
+    75th %ile SFI:
+    Max SFI:
+  </p>
+          </div>
+          <div class="col-xs-4">
+            <!-- <textarea class="tesslabel form-control" ng-model="wordfreqstats" rows="10" cols="2" style="height:220px" disabled></textarea> -->
+            <p class="clearlabel">
+
+
+{{data.wordfreq.meansfi}}
+
+{{data.wordfreq.minsfi}}
+{{data.wordfreq.p25sfi}}
+{{data.wordfreq.mediansfi}}
+{{data.wordfreq.p75sfi}}
+{{data.wordfreq.maxsfi}}
+
+</p>
+
+          </div>
+      </div>
+          <div class="row">
+            <div class="col-sm-2">
+            </div>
+            <div class="col-xs-12 col-sm-8" style="text-align:center;top:4px">
+              <p><br></p>
+              <label style="font-size:14px">Lowest Frequency Words:</label>
+              <div class="table-responsive multtable" style="height:155px">
+                <table id="lowfreqtable" class="table table-bordered table-striped">
+                  <tr ng-repeat="low in data.wordfreq.lowfreqwords">
+                    <td>{{low.lword}}</td>
+                    <td>{{low.freq}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="col-sm-2">
+            </div>
+
+            <!-- <label for="lowfreq">Lowest-Frequency Words:</label>
+            <textarea class="form-control multtext" id="lowfreq" rows="5" style="height:120px;text-align:left">11.46&emsp;&emsp;&emsp;&emsp;Me&#13;&#10;9.79&emsp;&emsp;&emsp;&emsp;Incomprehensible</textarea> -->
+          </div>
+          <br>
+      </div>
+      <div class="col-xs-5 col-lg-4">
+        <div class="table-responsive multtable" style="height:448px">
+          <table id="wordsfi" class="table table-striped table-bordered">
+              <tr>
+                <th>Word</th>
+                <th>SFI</th>
+              </tr>
+              <tr ng-repeat="sf in data.wordfreq.sfiwords">
+                <td>{{sf.sfword}}</td>
+                <td>{{sf.sfi}}</td>
+              </tr>
+          </table>
+        <!-- <label for="descwords"><b>&emsp;&emsp;Words&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Chars&emsp;&emsp;&emsp;Syllables</b></label>
+        <textarea class="form-control multtext" id="descwords" rows="25" style="width:290px;height:471px">Hi&emsp;&emsp;&emsp;3&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;8&#13;&#10;Incomprehensible&emsp;&emsp;&emsp;3&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;8</textarea> -->
+      </div>
+      </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-md-11 col-lg-9" style="text-align:center;top:15px">
+          <p></p>
+          <button type="button" class="btn btn-md btn-info" data-toggle="modal" data-target="#wordinfo">Info</button>
+          <button type="button" class="btn btn-md btn-info" ng-click="freqgraph=(!freqgraph)"><span ng-show="freqgraph">Hide Graph</span><span ng-hide="freqgraph">Show Graph</span></button>
+
+        </div>
+    </div>
+    <br><br>
+    <div ng-if="freqgraph">
+      <div class="row">
+        <div class="col-xs-12 col-md-11 col-lg-9" style="text-align:center">
+          <p style="font-size:20px">Word Frequency Range</p>
+        <canvas id="freq" height="100px" class="chart chart-pie" chart-legend="true" chart-data="freqdata" chart-labels="freqlabel"></canvas>
+      </div>
+    </div>
+  </div>
+    </div>
+
+
+
+    <!-------------POS STARTS HERE------------->
+
+
+
+    <div id="pos" class="tab-pane fade">
+        <div class="row">
+          <div class="col-xs-7 col-sm-8">
+          <div class="row">
+              <div class="col-xs-12 col-sm-6">
+                <div class="table-responsive halftable">
+                  <table id="pos1" class="table table-striped table-bordered">
+                      <tr>
+                        <th>Lexical PoS</th>
+                        <th>Count</th>
+                        <th>%</th>
+                      </tr>
+                      <tr ng-repeat="(key, value) in data.pos.lex">
+                        <td title="{{value.info}}">{{key | uppercase}}</td>
+                        <td>{{value.count}}</td>
+                        <td>{{value.pct}}</td>
+                      </tr>
+                    </table>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-6">
+                <div class="table-responsive halftable">
+                  <table id="pos2" class="table table-striped table-bordered">
+                      <tr>
+                        <th>Non-Lexical Pos</th>
+                        <th>Count</th>
+                        <th>%</th>
+                      </tr>
+                      <tr ng-repeat="(key, value) in data.pos.nonlex">
+                        <td title={{value.info}}>{{key | uppercase}}</td>
+                        <td>{{value.count}}</td>
+                        <td>{{value.pct}}</td>
+                      </tr>
+                    </table>
+                </div>
+              </div>
+          </div>
+
+          </div>   <!------col-7-ends-->
+          <div class="col-xs-5 col-sm-4">
+            <div class="table-responsive multtable" style="height:490px">
+              <table id="postable" class="table table-striped table-bordered">
+                  <tr>
+                    <th>Word</th>
+                    <th>PoS</th>
+                  </tr>
+                  <tr ng-repeat="pos in data.pos.wordparts">
+                    <td>{{pos.pword}}</td>
+                    <td>{{pos.part}}</td>
+                  </tr>
+              </table>
+          </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6 col-sm-4" style="text-align:center;padding-top:15px">
+            <p></p>
+            <!-- <p class="clearlabel">Lexical Density -->
+            <label for="lexden" style="font-size:18px">Lexical Density : <u>{{data.pos.lexden}}</u></label>
+            <!-- <input type="text"  class="form-control" ng-model="lexden" disabled> -->
+          </div>
+            <div class="col-xs-6 col-sm-8" style="text-align:center;padding-top:15px">
+              <p></p>
+              <button type="button" class="btn btn-md btn-info" data-toggle="modal" data-target="#posinfo">Info</button>
+              <button type="button" class="btn btn-md btn-info" ng-click="posgraph=!posgraph"><span ng-show="posgraph">Hide Graph</span><span ng-hide="posgraph">Show Graph</span></button>
+            </div>
+          </div>
+<br><br>
+          <div ng-if="posgraph">
+            <div class="row">
+              <div class="col-xs-12" style="text-align:center">
+              <canvas id="total" height="100px" class="chart chart-pie" chart-legend="true" chart-data="lexandnondata" chart-labels="lexandnonlabel"></canvas>
+            </div>
+          </div>
+          <br>
+          <div class="row" style="background-color:#FFFFFF">
+            <div class="col-xs-12" style="text-align:center">
+              <p style="font-size:20px;color:black">Lexical POS</p>
+            <canvas id="lex" height="200px" class="chart chart-bar" chart-series="lexseries" chart-data="lexdata" chart-labels="lexlabels[1]" chart-options="lexchart_options" chart="chart" ng-click="chartClick($event)"></canvas>
+          </div>
+        </div>
+        <br>
+        <div class="row" style="background-color:#FFFFFF">
+          <div class="col-xs-12" style="text-align:center">
+            <p style="font-size:20px;color:black">Non-Lexical POS</p>
+          <canvas id="nonlex" height="200px" class="chart chart-bar" chart-series="nonlexseries" chart-data="nonlexdata" chart-labels="nonlexlabels[1]"></canvas>
+        </div>
+        </div>
+      </div>
+    </div>
+
+
+<!---------------------PHRASES STARTS HERE---------------------->
+
+
+    <div id="phrases" class="tab-pane fade">
+        <div class="row">
+          <div class="col-xs-6 col-sm-4 col-lg-3">
+            <p class="clearlabel"><b>Phrases</b>
+
+    Noun(NP):
+    Verb(VP):
+    Prepositional(PP):</p>
+          </div>
+          <div class="col-xs-2 col-lg-1">
+            <!-- <textarea class="tesslabel form-control" ng-model="phrasestats" rows="5" cols="2" style="height:120px" disabled></textarea> -->
+            <p class="clearlabel">
+
+{{data.phrases.npcount}}
+{{data.phrases.vpcount}}
+{{data.phrases.ppcount}}
+</p>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-xs-8 col-sm-6 col-lg-4">
+          <p class="clearlabel" style="height:360px"><b>Phrase Tree:</b>
+
+{{data.phrases.tree}}</p>
+    <!-- <textarea class="tesslabel form-control" ng-model="phrasetree" style="width:90%;height:460px" rows="22" disabled></textarea> -->
+        </div>
+        </div>
+      </div>
+
+
+
+<!-------------------------MRC STARTS HERE------------------------>
+
+
+
+    <div id="mrc" class="tab-pane fade">
+      <div class="row">
+      <div class="col-xs-12 col-sm-4 col-md-5 col-lg-4">
+        <div class="row">
+          <div class="col-xs-9">
+            <p class="clearlabel">
+<b>Content Words, mean</b>
+
+    Age of Aquisition:
+
+    Familiarity:
+
+    Imagibility:
+
+    Concreteness:
+
+    Meaningfulness:
+
+</p>
+          </div>
+          <div class="col-xs-3">
+            <!-- <textarea class="tesslabel form-control" ng-model="mrcstats" rows="19" cols="2" style="height:240px" disabled></textarea> -->
+            <p class="clearlabel">
+
+
+{{data.mrc.aoamean}}
+
+{{data.mrc.fammean}}
+
+{{data.mrc.imagmean}}
+
+{{data.mrc.concmean}}
+
+{{data.mrc.meanmean}}
+
+</p>
+          </div>
+      </div>
+        <div class="row hidemrc">
+          <div class="col-sm-12" style="text-align:center">
+            <p></p>
+            <button type="button" class="btn btn-md btn-info" data-toggle="modal" data-target="#mrcinfo">Info</button>
+            <button type="button" class="btn btn-md btn-info" ng-click="mrcgraph=(!mrcgraph)"><span ng-show="mrcgraph">Hide Graph</span><span ng-hide="mrcgraph">Show Graph</span></button>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-1 col-md-0 col-lg-1">
+      </div>
+      <div class="col-xs-12 col-sm-7">
+          <!-- <div class="container-fluid form-group" -->
+            <div class="table-responsive multtable" style="height:490px">
+              <table id="mrctable" class="table table-striped table-bordered">
+                  <tr>
+                    <th>Word</th>
+                    <th>AoA</th>
+                    <th>Famil</th>
+                    <th>Imag</th>
+                    <th>Conc</th>
+                    <th>Mean</th>
+                  </tr>
+                  <tr ng-repeat="dict in data.mrc.dictionary">
+                    <td>{{dict.word}}</td>
+                    <td>{{dict.aoa}}</td>
+                    <td>{{dict.fam}}</td>
+                    <td>{{dict.imag}}</td>
+                    <td>{{dict.conc}}</td>
+                    <td>{{dict.mean}}</td>
+                  </tr>
+              </table>
+            <!-- <label for="descwords"><b>&emsp;&emsp;Words&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Chars&emsp;&emsp;&emsp;Syllables</b></label>
+            <textarea class="form-control multtext" id="descwords" rows="25" style="width:290px;height:471px">Hi&emsp;&emsp;&emsp;3&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;8&#13;&#10;Incomprehensible&emsp;&emsp;&emsp;3&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;8</textarea> -->
+          </div>
+      </div>
+    </div>
+    <div class="row showmrc">
+      <div class="col-xs-12" style="text-align:center">
+        <p></p>
+        <button type="button" class="btn btn-md btn-info" data-toggle="modal" data-target="#mrcinfo">Info</button>
+        <button type="button" class="btn btn-md btn-info" ng-click="mrcgraph=(!mrcgraph)"><span ng-show="mrcgraph">Hide Graph</span><span ng-hide="mrcgraph">Show Graph</span></button>
+      </div>
+    </div>
+    <br><br>
+    <div ng-if="mrcgraph">
+      <div class="row" style="background-color:#FFFFFF">
+        <div class="col-xs-12" style="text-align:center">
+          <p style="font-size:20px;color:black">Distribution of Words</p>
+        <canvas id="mrc" height="150px" class="chart chart-line" chart-series="mrcseries" chart-data="mrcdata" chart-legend="false" chart-labels="mrclabel" chart-options="mrcoptions" chart-dataset-override="datasetOverride"></canvas>
+      </div>
+    </div>
+      <div class="row">
+        <div class="col-xs-12" style="text-align:center">
+          <canvas id="mrc" height="0.1" class="chart chart-line" chart-series="mrcseries" chart-data="mrcdata" chart-legend="true" chart-labels="mrclabel" chart-options="options" chart-dataset-override="datasetOverride"></canvas>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<!---------------------------WORD DATA STARTS HERE--------------------------->
+
+
+
+    <div id="worddata" class="tab-pane fade">
+      <div class="row">
+        <div class="col-xs-12">
+              <b>Enter Word : </b><input type="text" ng-model="formData.enterword" ng-model-options="{ debounce: 600 }"> <button type="button" style="background-color:#007399;text-align:left" class="btn btn-primary btn-sm" ng-click="clearword()">Clear</button>
+        </div>
+      </div>
+      <div class="row">
+        <em style="font-size:13px;white-space:pre">                                            {{errorword}}</em>
+      </div>
+      <br>
+      <div class="row">
+            <div class="col-xs-12">
+            <p><b>Age of Aquisition : </b><u>{{wordaoa}}</u></p>
+            </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-6 col-sm-4">
+            <p></p>
+            <p class="clearlabel">
+<b>Word Frequency Guide:</b>
+
+      SFI Value:        {{worddata.sfivalue}}
+
+      Grade 1:          {{worddata.grade1}}
+      Grade 2:          {{worddata.grade2}}
+      Grade 3:          {{worddata.grade3}}
+      Grade 4:          {{worddata.grade4}}
+      Grade 5:          {{worddata.grade5}}
+      Grade 6:          {{worddata.grade6}}
+      Grade 7:          {{worddata.grade7}}
+      Grade 8:          {{worddata.grade8}}
+      Grade 9:          {{worddata.grade9}}
+      Grade 10:        {{worddata.grade10}}
+      Grade 11:        {{worddata.grade11}}
+      Grade 12:        {{worddata.grade12}}
+      Grade 13+:     {{worddata.grade13}}
+    </p>
+          </div>
+          </div>
+        </div>
+
+
+
+<!-------------------------SIMILARITY STARTS HERE_-------------------------->
+
+
+
+
+    <div id="sim" class="tab-pane fade">
+        <div class="row">
+          <div class="col-xs-12 col-sm-6 col-lg-5">
+          <label for="p1sim" style="font-size:16px">Enter Sentence 1:</label>
+          <textarea class="form-control" ng-model="formData.p1sim" rows="5"></textarea>
+          </div>
+
+          <div class="col-xs-12 col-sm-6 col-lg-5">
+          <label for="p2sim" style="font-size:16px">Enter Sentence 2:</label>
+          <textarea class="form-control" ng-model="formData.p2sim" rows="5"></textarea>
+        </div>
+      </div>
+      <br>
+
+        <div class="row">
+          <div class="col-xs-3 col-lg-2">
+          </div>
+          <div class="col-xs-6" style="text-align:center">
+          <!-- <label for="simcnt">Similarity:</label>
+          <input type="text"  class="form-control" ng-model="simcnt" disabled><br></p> -->
+          <p class="clearlabel" style="font-size:16px"><b>Similarity:</b>       {{simcnt}}</p>
+        </div>
+        <div class="col-xs-3 col-lg-2">
+        </div>
+      </div>
+      <br>
+        <div class="row">
+          <div class="col-xs-12 col-lg-10" style="text-align:center">
+            <button type="button" style="background-color:#007399" class="btn btn-sm btn-default" ng-click="sentProcess()">Sentences</button>
+            <!-- <button type="button" class="btn btn-sm btn-default" ng-click="passProcess()">Passages</button> -->
+            <button type="button" style="background-color:#007399" class="btn btn-sm btn-default" ng-click="clearsim()">Clear</button>
+          </div>
+        </div>
+
+      <!-- <div class="col-xs-1">
+      </div>
+      <div class="col-xs-6">
+        <textarea class="form-control" ng-model="formData.simpassage" rows="23" style="height:490px"></textarea>
+      </div> -->
+  </div>
+
+
+<!---------------------MODAL INFORMATION CONTENT ----------------------->
+
+<div class="modal-info">
+
+<!----------------------DESCRIPTIVE INFO-------------------->
+
+
+
+  <div class="modal fade" id="descinfo" role="dialog">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Lexical Diversity</h4>
+        </div>
+        <div class="modal-body">
+          <p style="white-space:pre-wrap">
+        The lexical diversity measures on this screen are quantifying variation in word use.
+
+        The type to token ratio is the ratio of unique words to total words.
+
+        MTLD is "Measure of Textual Lexical Diversity", a preferred measure of lexical
+        diversity that's more independent of text length than type to token ratio.
+      </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info btn-md" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--------------------READABILITY INFO----------------------->
+
+
+  <div class="modal fade" id="readinfo" role="dialog">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Readability</h4>
+        </div>
+        <div class="modal-body">
+          <p style="white-space:pre-wrap">
+        This screen calculates five common readability index values and their
+        corresponding grade levels.
+
+        'CC grade' refers to Common Core grade level.
+      </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info btn-md" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!--------------------------WORD FREQUENCY INFO-------------------->
+
+  <div class="modal fade" id="wordinfo" role="dialog">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Word Frequency Data</h4>
+        </div>
+        <div class="modal-body">
+          <p style="white-space:pre-wrap">
+        This screen's word frequency data is from The Educator's Word Frequency Guide,
+        which is based on the frequencies of words in a very large K-12 educational
+        corpus.
+
+        The SFI, Standard Frequency Index, is a normalized logarithmic index ranging
+        from 1-100.
+
+        An SFI of 40.0 = 1 occurrence per million words
+        An SFI of 50.0 = 10 occurrences per million
+        An SFI of 60.0 = 100 occurrences per million
+        Etc.
+      </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info btn-md" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<!-----------------------------------POS INFO-------------------------->
+
+<div class="modal fade" id="posinfo" role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Penn Treebank Part of Speech Tags</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+<ul style="width:55%; float:left;">
+      <li>NN - Noun, singular or mass</li>
+      <li>NNS - Noun, plural</li>
+      <li>NNP - Proper Noun, singular</li>
+      <li>NNPS - Proper Noun, plural</li>
+      <li>VB - Verb, base form</li>
+      <li>VBD - Verb, past tense</li>
+      <li>VBG - Verb, gerund or present participle</li>
+      <li>VBN - Verb, past participle</li>
+      <li>VBP - Verb, non-3rd person singular present</li>
+      <li>VBZ - Verb, 3rd person singular present</li>
+      <li>JJ - Adjective</li>
+      <li>JJR - Adjective, comparative</li>
+      <li>JJS - Adjective, superlative</li>
+      <li>RB - Adverb</li>
+      <li>RBR - Adverb, comparative</li>
+      <li>RBS - Adverb, superlative</li>
+      <li>CC - Coordinating Conjunction</li>
+   </ul>
+
+   <ul style="width:45%; float:right;">
+      <li>PRP - Personal Pronoun</li>
+      <li>PRP$ - Possessive Pronoun</li>
+      <li>DT - Determiner</li>
+      <li>IN - Preposition</li>
+      <li>RP - Particle</li>
+      <li>TO - to</li>
+      <li>CD - Cardinal Number</li>
+      <li>EX - Existential there</li>
+      <li>FW - Foreign Word</li>
+      <li>MD - Modal</li>
+      <li>PDT - Predeterminer</li>
+      <li>POS - Possessive Ending</li>
+      <li>UH - Interjection</li>
+      <li>WDT - Wh-Determiner</li>
+      <li>WP - Wh-Pronoun</li>
+      <li>WP$ - Possessive Wh-Pronoun</li>
+      <li>WRB - Wh-Adverb</li>
+   </ul>
+</div>
+<div class="row">
+<p style="white-space:pre-wrap">The "lexical denisty" value is the ratio of "content" words (nouns, verbs, adjectives, adverbs - the part-of-speech tags on the left) to total words. It's a way to quantify the "information density" of the text.</p>
+</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info btn-md" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-----------------------------------MRC INFO------------------------------->
+
+<div class="modal fade" id="mrcinfo" role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Concreteness</h4>
+      </div>
+      <div class="modal-body">
+        <p style="white-space:pre">
+      The lexical diversity measures on this screen are quantifying variation in word use.
+
+      The type to token ratio is the ratio of unique words to total words.
+
+      MTLD is "Measure of Textual Lexical Diversity", a preferred measure of lexical
+      diversity that's more independent of text length than type to token ratio.
+    </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info btn-md" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>  <!---------modal info end------->
+
+</div>  <!----------tabcontent end------->
+</div>  <!----------main tab div end----------->
+<div class="col-md-8 col-xs-12 mess" ng-show="(!tables)" style="font-size:35px;">
+  <p><br></p>
+  <p style="font-size:20px;text-align:center;vertical-align:center">{{message}}</p>
+</div>
+</form>
+</div>
+</body>
+</html>

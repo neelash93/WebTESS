@@ -1,0 +1,110 @@
+@media screen and (max-width: 990px) {
+  .bdtop {
+    border-top: 5px solid #ddd;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .bdright {
+    border-left: 5px solid #ddd;
+  }
+}
+
+#tabdiv {
+  min-height: 700px;
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+    background-color: #4E5D6C;
+}
+
+@media screen and (min-width: 768px) {
+.halftable {
+  height:490px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+.halftable {
+  height:238px;
+  }
+}
+
+th {
+  font-size:14px;
+  font-style:italic;
+  /*background-color:#007399;*/
+  text-decoration : underline;
+}
+
+
+
+@media screen and (max-width: 768px) {
+  .hidemrc {
+   visibility: hidden;
+   /*display:none !important;*/
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .showmrc {
+   visibility: hidden;
+   /*display:none !important;*/
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .mess {
+    top:150px;
+  }
+}
+
+.tesslabel {
+    font-family: "Times New Roman";
+    font-size: 14.7px;
+    width: 65px;
+    padding-top: 8px;
+    disabled;
+}
+
+.multtable {
+  /*font-family: "Times New Roman";*/
+  /*font-size: 15px;*/
+  height:490px;
+  overflow:scroll;
+  /*outline:0.5px dashed white;*/
+  border-style: dashed;
+  border-width: 1px;
+  border-color: white;
+}
+
+
+.halftable {
+  /*font-family: "Times New Roman";*/
+  /*font-size: 15px;*/
+  /*height:490px;*/
+  overflow:scroll;
+  /*outline:0.5px dashed white;*/
+  border-style: dashed;
+  border-width: 1px;
+  border-color: white;
+}
+
+
+li .active {
+  background-color:#4E5D6C;
+}
+
+
+.clearlabel {
+  /*font-family: "Times New Roman";*/
+  font-size: 14px;
+  overflow-x: scroll;
+  white-space: pre;
+  /*outline: 0.5px dashed white;*/
+  border-style: dashed;
+  border-width: 1px;
+  border-color: white;
+}

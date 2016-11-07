@@ -1,0 +1,13 @@
+image: python:3.5.1
+
+pipelines:
+  default:
+    - step:
+        script: # Modify the commands below to build your repository.
+          - apt-get update # required to install zip
+          - apt-get install -y zip # required for packaging up the application
+          - pip install boto3==1.3.0 # required for beanstalk_deploy.py
+          - cd webtess/
+          - zip -r /tmp/artifact.zip . -x .elasticbeanstalk/\*
+          - cd .. #package up the application for deployment
+          - python beanstalk_deploy.py # run the deployment script
